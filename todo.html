@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.done{
+			text-decoration: line-through;
+		}
+
+		#todo{
+			margin : 100px 0 0 400px;
+			background: #fff;
+			padding: 50px;
+			width : 300px;
+
+		}
+		body{
+			background: #ddd;
+		}
+		.title {
+			font-size : 1.5em;
+			font-weight: 500;
+		}
+
+		.entry{
+			font-size: 1.5em;
+			font-weight: bold;
+			margin-right: 10px;
+		}
+
+		input {
+			padding : 8px;
+			border-color: #eee;
+			border-radius: 5px;
+			/*width:100%;*/
+		}
+
+		ul {
+			list-style-type: none;
+			padding-left: 0;
+		}
+
+		.del-btn{
+			float:right;
+		}
+
+		ul.todo > li {
+
+		}
+
+	</style>
+</head>
+<body>
+
+<div id="todo">
+	<div class="title"> The "Meh" todo App</div>
+	<div>
+		<input type="" v-on:keyup.enter="submitEntry" v-model="job" />
+	</div>
+	<div>
+		<ul class="todo">
+			<li v-for="todo in todos"> 
+				<input type="checkbox" v-model="todo.done"> <span class="entry" :class="todo.done?'done':''">{{todo.label}}</span> 
+
+				<a class="del-btn" href="#" @click="remove($index)">delete</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/vue.min.js"></script>
+<script type="text/javascript">
+	var todo = new Vue({
+		el: '#todo',
+		data : {
+			job  : '',
+			todos : [
+
+			]
+		},
+		methods: {
+			submitEntry: function(){
+				this.todos.push({done: false, label : this.job});
+				this.job = '';
+			},
+			remove : function(idx){
+				event.preventDefault();
+				console.log("index number : "+idx);
+				this.todos.splice(idx);
+			}
+		}
+	})
+</script>
+</body>
+</html>
