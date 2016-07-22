@@ -52,7 +52,7 @@
 </head>
 <body>
 
-<div id="todo">
+<div id="todo" @load="loadData">
 	<div class="title"> The "Meh" todo App</div>
 	<div>
 		<input type="" v-on:keyup.enter="submitEntry" v-model="job" />
@@ -70,6 +70,11 @@
 
 <script type="text/javascript" src="js/vue.min.js"></script>
 <script type="text/javascript">
+
+	const API_URL = 'http://localhost:60203/api/Todo';
+	const GET_URL = API_URL+"/GetTodo";
+	const POST_URL = API_URL+"/POSTTodo";
+
 	var todo = new Vue({
 		el: '#todo',
 		data : {
@@ -80,14 +85,40 @@
 		},
 		methods: {
 			submitEntry: function(){
-				this.todos.push({done: false, label : this.job});
-				this.job = '';
+				
+				var postData = {
+					status : false, job : this.job
+				}
+
+				this.$http.post(POST_URL,postData,(response) =>{
+					if(response.status == true){
+						this.todos.push({done: false, label : todo.job})
+						this.job = ''
+					}
+				}).error((err)=>{
+					context.error = err
+				})
+
+				
 			},
 			remove : function(idx){
 				event.preventDefault();
 				console.log("index number : "+idx);
 				this.todos.splice(idx);
+			},
+
+			loadData: function(){
+				// this.$http.get(GET_URL)then ((response) =>{
+				// 	while(response)
+				// 		this.todos.push({done: response.status, label : response.job})
+				// 		this.job = ''
+				// 	}
+				// }),((response)=>{
+				// 	context.error = response
+				// })
 			}
+
+
 		}
 	})
 </script>
